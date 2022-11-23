@@ -10,7 +10,7 @@ from selenium.webdriver.chrome.service import Service
 options = webdriver.ChromeOptions()
 options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
-browser = webdriver.Chrome(options=options) #Подключение веб драйвера
+browser = webdriver.Chrome()#options=options) #Подключение веб драйвера
 browser.delete_all_cookies()
 browser.get('http://192.168.20.21/') #IP сервера atlasCopco
 
@@ -20,12 +20,12 @@ with open("page_source.html", "w",encoding='utf-8') as f:
  f.write(browser.page_source)
  html =  open('page_source.html','r')
 
-soup = BeautifulSoup(browser.page_source, 'lxml')#.decode('utf-8') #Загрузка страницы в BS
+soup = BeautifulSoup(browser.page_source, 'html.parser').decode('cp1251') #Загрузка страницы в BS
 
 print (soup)
-time.sleep(3)
+time.sleep(20)
 
-if 'ESUNIT' in html:
+if 'ESUNIT' in soup:
     ESUNIT = soup.find("div", {"id": "ESUNIT"}) #Поиск давления
     bar =''.join(ESUNIT.split('>')[1]) #Обрезка строки до значения давления
     pressure = ''.join(bar.split()[:1]) #Обрезка после значения
